@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storage Guide Bot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chatbot {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    .question {
+      margin-bottom: 1.5rem;
+    }
+    button {
+      margin: 0.25rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chatbot">
+    <div class="question" id="question">Hi! I'm here to help you decide between cloud and local storage. Ready to begin?</div>
+    <div id="buttons">
+      <button onclick="next(true)">Yes</button>
+      <button onclick="next(false)">No</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Do you need to access your files from multiple devices or locations?",
+        cloud: true
+      },
+      {
+        text: "Are you storing sensitive or confidential information (like legal, medical, or personal data)?",
+        cloud: false
+      },
+      {
+        text: "Do you have reliable, fast internet access where you usually work?",
+        cloud: true
+      },
+      {
+        text: "Will you be storing very large files (videos, high-res images, etc.)?",
+        cloud: false
+      },
+      {
+        text: "Do you want automatic backups and file recovery in case something goes wrong?",
+        cloud: true
+      }
+    ];
+
+    let index = -1;
+    let cloudScore = 0;
+    let localScore = 0;
+
+    function next(answer) {
+      if (index === -1) {
+        index++;
+        loadQuestion();
+        return;
+      }
+
+      if (questions[index].cloud === answer) {
+        cloudScore++;
+      } else {
+        localScore++;
+      }
+
+      index++;
+
+      if (index < questions.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function loadQuestion() {
+      document.getElementById("question").innerText = questions[index].text;
+    }
+
+    function showResult() {
+      const result = document.getElementById("question");
+      const buttons = document.getElementById("buttons");
+      buttons.innerHTML = "";
+
+      if (cloudScore >= 4) {
+        result.innerText =
+          "Based on your answers, cloud storage is likely the best fit. It's flexible, accessible, and great for backups.";
+      } else if (localScore >= 4) {
+        result.innerText =
+          "Local storage is likely best for your needs—especially if you're handling large or sensitive files with less internet reliability.";
+      } else {
+        result.innerText =
+          "A hybrid storage approach might work best. Use local for large or sensitive files, and cloud for collaboration and backups.";
+      }
+    }
+  </script>
+</body>
+</html>
